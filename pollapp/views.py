@@ -38,7 +38,6 @@ class ResultsView(generic.DetailView):
     model = Question
     template_name = 'pollapp/results.html'
 
-
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     try:
@@ -46,10 +45,9 @@ def vote(request, question_id):
     except (KeyError, Choice.DoesNotExist):
         return render(request, 'pollapp/detail.html', {
             'question': question,
-            'error_message': 'You didn\'t select a choice'
+            'error_message': "You didn't select a choice.",
         })
     else:
-        selected_choice.vote += 1
+        selected_choice.votes += 1
         selected_choice.save()
-
-        return HttpResponseRedirect(reverse('pollapp:results', args=(question.id)))
+        return HttpResponseRedirect(reverse('pollapp:results', args=(question.id,)))
